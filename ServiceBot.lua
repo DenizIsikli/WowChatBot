@@ -23,7 +23,7 @@ Commands = {
 
     -- Help command
     ["help"] = function(command, args)
-        SendChatMessage("Available commands: !help, !crit", "GUILD")
+        SendChatMessage("Available commands: !help, !crit, !ap, !app, !sp, !armor, !health", "GUILD")
     end,
 
     -- Crit command
@@ -48,6 +48,18 @@ Commands = {
     ["sp"] = function(command, args)
         local sp = GetSpellBonusDamage(2)
         SendChatMessage("Your current spell power is: " .. sp .. " SP")
+    end,
+
+    -- Armor command
+    ["armor"] = function(command, args)
+        local armor = UnitArmor("player")
+        SendChatMessage("Your current armor is: " .. armor .. " Armor")
+    end,
+
+    -- Health command
+    ["health"] = function(command, args)
+        local health = UnitHealth("player")
+        SendChatMessage("Your current health is: " .. health .. " HP")
     end,
 }
 
