@@ -11,7 +11,8 @@ frame:SetScript("OnEvent", function(self, event, message)
         
         if command then
             commandList(command, args)
-            main()
+        else
+            SendChatMessage("Unknown command. Type !help for a list of commands.", "GUILD")
         end
     end
 end)
@@ -21,46 +22,75 @@ Commands = {
     -- List of all available commands
         -- Predominantly random commands for all purposes of gathering information
 
-    -- Help command
+    -- Help commands
     ["help"] = function(command, args)
-        SendChatMessage("Available commands: !help, !crit, !ap, !app, !sp, !armor, !health", "GUILD")
+        SendChatMessage("Available commands: !help, !basestats, !separated, !crit, !ap, !app, !sp, !armor, !health", "GUILD")
     end,
 
-    -- Crit command
-    ["crit"] = function(command, args)
-        local crit = GetCritChance()
-        SendChatMessage("Your current crit chance is: " .. crit .. "%")
+    ["separatedCmds"]  = function(command, args)
+        SendChatMessage("Stat commands separated: !crit, !ap, !app, !sp, !armor, !health, !block, !dodge, !parry, !resil, !haste, !mastery", "GUILD")
     end,
 
-    -- Attack power command
-    ["ap"] = function(command, args)
-        local ap = UnitAttackPower("player")
-        SendChatMessage("Your current attack power is: " .. ap .. " AP")
+
+    -- Base Stats command
+    ["basestats"] = function(command, args)
+        local strength = UnitStat("player", 1) or 0
+        local agility = UnitStat("player", 2) or 0
+        local stamina = UnitStat("player", 3) or 0
+        local intellect = UnitStat("player", 4) or 0
+        local spirit = UnitStat("player", 5) or 0
+        local armor = UnitArmor("player") or 0
+        SendChatMessage("Base Stats: Strength: " .. strength .. "\n" .. "Agility: " .. agility .. "\n" .. "Stamina: " .. stamina .. "\n" .. "Intellect: " .. intellect .. "\n" .. "Spirit: " .. spirit .. "\n" .. "Armor: " .. armor, "GUILD")
     end,
 
-    -- Attack power (pet) command
-    ["app"] = function(command, args)
-        local app = UnitAttackPower("pet")
-        SendChatMessage("Your current pet attack power is: " .. app .. " AP")
+    -- Separated stat commands for "separatedCmds" command
+    -- ---------------------------------------------------
+
+    -- Non dynamic commands - not within the API
+    -- Base Stats
+        -- Strength command
+    ["str"] = function(command, args)
+        local strength = UnitStat("player", 1) or 0
+        SendChatMessage("Your current strength is: " .. strength, "GUILD")
     end,
 
-    -- Spell power command
-    ["sp"] = function(command, args)
-        local sp = GetSpellBonusDamage(2)
-        SendChatMessage("Your current spell power is: " .. sp .. " SP")
+        -- Agility command
+    ["agi"] = function(command, args)
+        local agility = UnitStat("player", 2) or 0
+        SendChatMessage("Your current agility is: " .. agility, "GUILD")
     end,
 
-    -- Armor command
-    ["armor"] = function(command, args)
-        local armor = UnitArmor("player")
-        SendChatMessage("Your current armor is: " .. armor .. " Armor")
+        -- Stamina command
+    ["sta"] = function(command, args)
+        local stamina = UnitStat("player", 3) or 0
+        SendChatMessage("Your current stamina is: " .. stamina, "GUILD")
     end,
 
-    -- Health command
-    ["health"] = function(command, args)
-        local health = UnitHealth("player")
-        SendChatMessage("Your current health is: " .. health .. " HP")
+        -- Intellect command
+    ["int"] = function(command, args)
+        local intellect = UnitStat("player", 4) or 0
+        SendChatMessage("Your current intellect is: " .. intellect, "GUILD")
     end,
+
+        -- Spirit command
+    ["spi"] = function(command, args)
+        local spirit = UnitStat("player", 5) or 0
+        SendChatMessage("Your current spirit is: " .. spirit, "GUILD")
+    end,
+ 
+    ["armor"] = function() return UnitArmor("player") end,
+    ["crit"] = GetCritChance,
+    ["ap"] = UnitAttackPower,
+    ["app"] = function() return UnitAttackPower("pet") end,
+    ["sp"] = function() return GetSpellBonusDamage(2) end,
+    ["health"] = function() return UnitHealth("player") end,
+    ["block"] = GetBlockChance,
+    ["dodge"] = GetDodgeChance,
+    ["parry"] = GetParryChance,
+    ["resil"] = function() return GetCombatRating(24) end,
+    ["haste"] = function() return GetCombatRating(18) end,
+    ["mastery"] = GetMastery,
+
 }
 
 
@@ -74,10 +104,4 @@ function commandList(command, args)
     else
         SendChatMessage("Unknown command. Type !help for a list of commands.", "GUILD")
     end
-end
-
-
--- Main function
-function main ()
-    commandList()
 end
