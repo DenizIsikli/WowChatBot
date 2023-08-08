@@ -3,6 +3,8 @@
 local frame = CreateFrame("FRAME", "Frame");
 frame:RegisterEvent("CHAT_MSG_SELF")
 
+
+-- Event handler for the chat message event
 frame:SetScript("OnEvent", function(self, event, message)
     if string.sub(message, 1, 1) == "!" then
         local command, args = string.match(message, "!(%w+)%s*(.*)")
@@ -13,6 +15,7 @@ frame:SetScript("OnEvent", function(self, event, message)
         end
     end
 end)
+
 
 Commands = {
     -- List of all available commands
@@ -31,8 +34,14 @@ Commands = {
 
     -- Attack power command
     ["ap"] = function(command, args)
-        local ap = GetAttackPower()
+        local ap = UnitAttackPower("player")
         SendChatMessage("Your current attack power is: " .. ap .. " AP")
+    end,
+
+    -- Attack power (pet) command
+    ["app"] = function(command, args)
+        local app = UnitAttackPower("pet")
+        SendChatMessage("Your current pet attack power is: " .. app .. " AP")
     end,
 
     -- Spell power command
@@ -41,6 +50,7 @@ Commands = {
         SendChatMessage("Your current spell power is: " .. sp .. " SP")
     end,
 }
+
 
 -- Command List function that executes the specified command 
 -- depending on the input from the user
@@ -59,4 +69,3 @@ end
 function main ()
     commandList()
 end
-
