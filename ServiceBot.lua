@@ -83,12 +83,19 @@ Commands = {
         SendChatMessage("Spell Enhancement stats: Spell Hit: " .. spellHit .. "\n" .. "Spell Damage: " .. spellDamage .. "\n" .. "Spell Critical Strike: " .. spellCrit .. "\n" .. "Spell Haste: " .. spellHaste .. "\n" .. "Healing: " .. healing .. "\n" .. "Mana regen (not casting): " .. manaRegenNotCasting .. "\n" .. "Mana regen (casting): " .. manaRegenCasting, "GUILD")
     end,
 
-    -- print next server reset
+    -- Next server reset
     ["reset"] = function(command, args)
         local reset = GetQuestResetTime()
-        SendChatMessage("The next server reset is in: " .. reset .. " seconds.", "GUILD")
+        local reset_hour = ((reset / 60) / 60)
+        SendChatMessage("The next server reset is in: " .. reset_hour .. " seconds.", "GUILD")
     end,
 
+    -- Session time (time since login)
+    ["session"] = function(command, args)
+        local session = GetSessionTime()
+        local session_hour = ((session / 60) / 60)
+        SendChatMessage("You have been logged in for: " .. session_hour .. " hours", "GUILD")
+    end,
 
     -- Separated stat commands for "separatedCmds" command
     -- ---------------------------------------------------
